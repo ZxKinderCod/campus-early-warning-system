@@ -16,13 +16,13 @@ model_dir = os.path.join(base_path, "results", "models")
 os.makedirs(model_dir, exist_ok=True)
 
 print("="*70)
-print("🤖 MACHINE LEARNING - CAMPUS EARLY WARNING SYSTEM")
+print(" MACHINE LEARNING - CAMPUS EARLY WARNING SYSTEM")
 print("="*70)
 
 # ========================================
 # 1. LOAD & PREPARE DATA
 # ========================================
-print("\n1️⃣ LOADING DATA...")
+print("\n LOADING DATA...")
 df = pd.read_csv(data_path)
 
 # Encode target
@@ -52,7 +52,7 @@ features = ['IPS_1', 'IPS_2', 'IPS_3', 'IPS_4', 'IPS_5', 'IPS_6', 'IPS_7', 'IPS_
 X = df[features]
 y = df['target']
 
-print(f"✅ Data loaded: {len(df)} rows")
+print(f" Data loaded: {len(df)} rows")
 print(f"   Features: {len(features)}")
 print(f"   Target distribution:")
 print(f"   - Lulus Tepat Waktu: {(y == 1).sum()} ({(y == 1).sum()/len(y)*100:.1f}%)")
@@ -61,16 +61,16 @@ print(f"   - Terlambat: {(y == 0).sum()} ({(y == 0).sum()/len(y)*100:.1f}%)")
 # ========================================
 # 2. SPLIT DATA
 # ========================================
-print("\n2️⃣ SPLITTING DATA...")
+print("\n SPLITTING DATA...")
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-print(f"✅ Train set: {len(X_train)} samples")
-print(f"✅ Test set: {len(X_test)} samples")
+print(f" Train set: {len(X_train)} samples")
+print(f" Test set: {len(X_test)} samples")
 
 # ========================================
 # 3. FEATURE SCALING
 # ========================================
-print("\n3️⃣ FEATURE SCALING...")
+print("\n FEATURE SCALING...")
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train)
 X_test_scaled = scaler.transform(X_test)
@@ -78,12 +78,12 @@ X_test_scaled = scaler.transform(X_test)
 # Save scaler
 with open(os.path.join(model_dir, 'scaler.pkl'), 'wb') as f:
     pickle.dump(scaler, f)
-print("✅ Scaler saved")
+print(" Scaler saved")
 
 # ========================================
 # 4. MODEL COMPARISON
 # ========================================
-print("\n4️⃣ TRAINING & COMPARING MODELS...")
+print("\n TRAINING & COMPARING MODELS...")
 print("-" * 70)
 
 models = {
@@ -95,7 +95,7 @@ models = {
 results = {}
 
 for name, model in models.items():
-    print(f"\n🔹 Training {name}...")
+    print(f"\n Training {name}...")
     
     # Train model
     if name == 'Logistic Regression':
@@ -128,7 +128,7 @@ for name, model in models.items():
 # ========================================
 # 5. SELECT BEST MODEL & HYPERPARAMETER TUNING
 # ========================================
-print("\n5️⃣ HYPERPARAMETER TUNING (Random Forest)...")
+print("\n HYPERPARAMETER TUNING (Random Forest)...")
 print("-" * 70)
 
 # Best model is usually Random Forest, so we tune it
@@ -146,24 +146,24 @@ grid_search.fit(X_train, y_train)
 best_model = grid_search.best_estimator_
 best_params = grid_search.best_params_
 
-print(f"\n✅ Best Parameters: {best_params}")
-print(f"✅ Best CV Score: {grid_search.best_score_:.4f}")
+print(f"\n Best Parameters: {best_params}")
+print(f" Best CV Score: {grid_search.best_score_:.4f}")
 
 # Predict with best model
 y_pred_best = best_model.predict(X_test)
 best_accuracy = accuracy_score(y_test, y_pred_best)
 
-print(f"✅ Test Accuracy: {best_accuracy:.4f} ({best_accuracy*100:.2f}%)")
+print(f" Test Accuracy: {best_accuracy:.4f} ({best_accuracy*100:.2f}%)")
 
 # ========================================
 # 6. SAVE BEST MODEL
 # ========================================
-print("\n6️⃣ SAVING MODELS...")
+print("\n SAVING MODELS...")
 
 # Save best model
 with open(os.path.join(model_dir, 'best_model.pkl'), 'wb') as f:
     pickle.dump(best_model, f)
-print("✅ Best model saved: best_model.pkl")
+print(" Best model saved: best_model.pkl")
 
 # Save label encoders
 with open(os.path.join(model_dir, 'label_encoders.pkl'), 'wb') as f:
@@ -172,12 +172,12 @@ with open(os.path.join(model_dir, 'label_encoders.pkl'), 'wb') as f:
         'nikah': le_nikah,
         'mahasiswa': le_mahasiswa
     }, f)
-print("✅ Label encoders saved")
+print(" Label encoders saved")
 
 # Save feature names
 with open(os.path.join(model_dir, 'feature_names.pkl'), 'wb') as f:
     pickle.dump(features, f)
-print("✅ Feature names saved")
+print(" Feature names saved")
 
 # Save all results for evaluation
 results['Best Random Forest'] = {
@@ -194,12 +194,12 @@ with open(os.path.join(model_dir, 'model_results.pkl'), 'wb') as f:
         'y_test': y_test,
         'feature_names': features
     }, f)
-print("✅ Model results saved")
+print(" Model results saved")
 
 # ========================================
 # 7. FEATURE IMPORTANCE
 # ========================================
-print("\n7️⃣ FEATURE IMPORTANCE:")
+print("\n FEATURE IMPORTANCE:")
 print("-" * 70)
 
 importances = best_model.feature_importances_
@@ -214,13 +214,13 @@ print(feature_importance.to_string(index=False))
 # 8. FINAL SUMMARY
 # ========================================
 print("\n" + "="*70)
-print("📊 MODEL TRAINING SUMMARY")
+print(" MODEL TRAINING SUMMARY")
 print("="*70)
 
-print("\n🏆 MODEL COMPARISON:")
+print("\n MODEL COMPARISON:")
 for name, result in results.items():
     if name == 'Best Random Forest':
-        print(f"\n⭐ {name} (BEST)")
+        print(f"\n {name} (BEST)")
         print(f"   Accuracy: {result['accuracy']:.4f} ({result['accuracy']*100:.2f}%)")
         print(f"   Parameters: {result['best_params']}")
     else:
@@ -228,10 +228,10 @@ for name, result in results.items():
         print(f"   Accuracy: {result['accuracy']:.4f} ({result['accuracy']*100:.2f}%)")
         print(f"   CV Score: {result['cv_mean']:.4f} (+/- {result['cv_std']:.4f})")
 
-print("\n🎯 TOP 5 MOST IMPORTANT FEATURES:")
+print("\n TOP 5 MOST IMPORTANT FEATURES:")
 for idx, row in feature_importance.head(5).iterrows():
     print(f"   {row['Feature']}: {row['Importance']:.4f}")
 
-print("\n✅ MODEL TRAINING COMPLETE!")
-print(f"📁 Models saved in: {model_dir}")
+print("\n MODEL TRAINING COMPLETE!")
+print(f" Models saved in: {model_dir}")
 print("\nNext: Run evaluasi_model.py for detailed evaluation")

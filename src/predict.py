@@ -8,13 +8,13 @@ base_path = r"C:\coding cihuy\pygwalker"
 model_dir = os.path.join(base_path, "results", "models")
 
 print("="*70)
-print("🔮 STUDENT GRADUATION PREDICTION SYSTEM")
+print(" STUDENT GRADUATION PREDICTION SYSTEM")
 print("="*70)
 
 # ========================================
 # 1. LOAD MODEL & TOOLS
 # ========================================
-print("\n1️⃣ LOADING MODEL & PREPROCESSING TOOLS...")
+print("\n1️ LOADING MODEL & PREPROCESSING TOOLS...")
 
 with open(os.path.join(model_dir, 'best_model.pkl'), 'rb') as f:
     model = pickle.load(f)
@@ -28,7 +28,7 @@ with open(os.path.join(model_dir, 'label_encoders.pkl'), 'rb') as f:
 with open(os.path.join(model_dir, 'feature_names.pkl'), 'rb') as f:
     feature_names = pickle.load(f)
 
-print("✅ All models and tools loaded successfully")
+print(" All models and tools loaded successfully")
 
 # ========================================
 # 2. PREDICTION FUNCTION
@@ -84,11 +84,11 @@ def predict_student(student_data):
 def get_risk_level(prob_lulus):
     """Determine risk level based on probability"""
     if prob_lulus >= 0.7:
-        return "RENDAH ✅"
+        return "RENDAH "
     elif prob_lulus >= 0.5:
-        return "SEDANG ⚠️"
+        return "SEDANG "
     else:
-        return "TINGGI 🚨"
+        return "TINGGI "
 
 def get_recommendation(student_data, prob_lulus):
     """Generate recommendation based on student data"""
@@ -99,30 +99,30 @@ def get_recommendation(student_data, prob_lulus):
     avg_ips = np.mean(ips_values)
     
     if avg_ips < 2.5:
-        recommendations.append("⚠️ IPS rata-rata rendah! Tingkatkan performa akademik")
+        recommendations.append(" IPS rata-rata rendah! Tingkatkan performa akademik")
     elif avg_ips < 3.0:
-        recommendations.append("📚 IPS cukup baik, pertahankan dan tingkatkan lagi")
+        recommendations.append(" IPS cukup baik, pertahankan dan tingkatkan lagi")
     else:
-        recommendations.append("✅ IPS sangat baik! Pertahankan prestasi")
+        recommendations.append(" IPS sangat baik! Pertahankan prestasi")
     
     # Check IPS trend
     if len(ips_values) >= 4:
         recent_trend = np.mean(ips_values[-4:]) - np.mean(ips_values[:4])
         if recent_trend < -0.2:
-            recommendations.append("📉 Performa menurun! Segera konsultasi dengan pembimbing akademik")
+            recommendations.append(" Performa menurun! Segera konsultasi dengan pembimbing akademik")
         elif recent_trend > 0.2:
-            recommendations.append("📈 Performa meningkat! Terus pertahankan")
+            recommendations.append(" Performa meningkat! Terus pertahankan")
     
     # Risk-based recommendations
     if prob_lulus < 0.5:
-        recommendations.append("🚨 RISIKO TINGGI! Butuh bimbingan intensif dan action plan")
-        recommendations.append("💡 Pertimbangkan mengikuti remedial atau kursus tambahan")
+        recommendations.append(" RISIKO TINGGI! Butuh bimbingan intensif dan action plan")
+        recommendations.append(" Pertimbangkan mengikuti remedial atau kursus tambahan")
     elif prob_lulus < 0.7:
-        recommendations.append("⚠️ Perlu peningkatan! Fokus pada mata kuliah dengan IPS rendah")
+        recommendations.append(" Perlu peningkatan! Fokus pada mata kuliah dengan IPS rendah")
     
     # Work status recommendation
     if student_data['STATUS_MAHASISWA'] == 'BEKERJA' and prob_lulus < 0.6:
-        recommendations.append("⏰ Pertimbangkan untuk mengurangi jam kerja dan fokus pada kuliah")
+        recommendations.append(" Pertimbangkan untuk mengurangi jam kerja dan fokus pada kuliah")
     
     return recommendations
 
@@ -163,7 +163,7 @@ def predict_batch(csv_file_path):
 # ========================================
 
 print("\n" + "="*70)
-print("📝 CONTOH PREDIKSI MAHASISWA BARU")
+print(" CONTOH PREDIKSI MAHASISWA BARU")
 print("="*70)
 
 # Example student 1: Good performance
@@ -182,15 +182,15 @@ mahasiswa_1 = {
     'STATUS_MAHASISWA': 'TIDAK BEKERJA'
 }
 
-print("\n👨‍🎓 MAHASISWA 1 (Performa Baik):")
+print("\n👨 MAHASISWA 1 (Performa Baik):")
 print("-" * 70)
 result_1 = predict_student(mahasiswa_1)
-print(f"🎯 Prediksi: {result_1['prediction']}")
-print(f"📊 Confidence: {result_1['confidence']:.2f}%")
+print(f" Prediksi: {result_1['prediction']}")
+print(f" Confidence: {result_1['confidence']:.2f}%")
 print(f"   • Probabilitas Lulus: {result_1['probability_lulus']:.2f}%")
 print(f"   • Probabilitas Terlambat: {result_1['probability_terlambat']:.2f}%")
-print(f"⚠️ Risk Level: {result_1['risk_level']}")
-print(f"\n💡 Recommendations:")
+print(f" Risk Level: {result_1['risk_level']}")
+print(f"\n Recommendations:")
 for rec in result_1['recommendation']:
     print(f"   {rec}")
 
@@ -210,27 +210,27 @@ mahasiswa_2 = {
     'STATUS_MAHASISWA': 'BEKERJA'
 }
 
-print("\n👩‍🎓 MAHASISWA 2 (Berisiko):")
+print("\n MAHASISWA 2 (Berisiko):")
 print("-" * 70)
 result_2 = predict_student(mahasiswa_2)
-print(f"🎯 Prediksi: {result_2['prediction']}")
-print(f"📊 Confidence: {result_2['confidence']:.2f}%")
+print(f" Prediksi: {result_2['prediction']}")
+print(f" Confidence: {result_2['confidence']:.2f}%")
 print(f"   • Probabilitas Lulus: {result_2['probability_lulus']:.2f}%")
 print(f"   • Probabilitas Terlambat: {result_2['probability_terlambat']:.2f}%")
-print(f"⚠️ Risk Level: {result_2['risk_level']}")
-print(f"\n💡 Recommendations:")
+print(f" Risk Level: {result_2['risk_level']}")
+print(f"\n Recommendations:")
 for rec in result_2['recommendation']:
     print(f"   {rec}")
 
 print("\n" + "="*70)
-print("✅ PREDICTION SYSTEM READY!")
+print(" PREDICTION SYSTEM READY!")
 print("="*70)
-print("\n📌 How to use:")
+print("\n How to use:")
 print("   1. Single prediction: Call predict_student(student_data)")
 print("   2. Batch prediction: Call predict_batch('path/to/file.csv')")
-print("\n💡 Features:")
-print("   ✅ Prediction with confidence score")
-print("   ✅ Risk level assessment")
-print("   ✅ Personalized recommendations")
-print("   ✅ Early warning detection")
-print("   ✅ Batch processing capability")
+print("\n Features:")
+print("    Prediction with confidence score")
+print("    Risk level assessment")
+print("    Personalized recommendations")
+print("    Early warning detection")
+print("    Batch processing capability")

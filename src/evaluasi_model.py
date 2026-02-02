@@ -15,13 +15,13 @@ data_path = os.path.join(base_path, "data", "datamahasiswa_clean.csv")
 os.makedirs(viz_dir, exist_ok=True)
 
 print("="*70)
-print("📊 MODEL EVALUATION - CAMPUS EARLY WARNING SYSTEM")
+print(" MODEL EVALUATION - CAMPUS EARLY WARNING SYSTEM")
 print("="*70)
 
 # ========================================
 # 1. LOAD MODEL & RESULTS
 # ========================================
-print("\n1️⃣ LOADING MODELS & DATA...")
+print("\n LOADING MODELS & DATA...")
 
 with open(os.path.join(model_dir, 'best_model.pkl'), 'rb') as f:
     best_model = pickle.load(f)
@@ -36,12 +36,12 @@ with open(os.path.join(model_dir, 'model_results.pkl'), 'rb') as f:
 # Load full dataset for additional analysis
 df_full = pd.read_csv(data_path)
 
-print("✅ Models and data loaded successfully")
+print(" Models and data loaded successfully")
 
 # ========================================
 # 2. FEATURE IMPORTANCE (DIPERBAIKI - TANPA ENCODE)
 # ========================================
-print("\n2️⃣ CREATING FEATURE IMPORTANCE CHART...")
+print("\n CREATING FEATURE IMPORTANCE CHART...")
 
 importances = best_model.feature_importances_
 
@@ -87,13 +87,13 @@ for i, (bar, importance) in enumerate(zip(bars, feature_importance_df['Tingkat P
 
 plt.tight_layout()
 plt.savefig(os.path.join(viz_dir, '07_feature_importance.png'), dpi=300, bbox_inches='tight')
-print(f"✅ Feature Importance saved: 07_feature_importance.png")
+print(f" Feature Importance saved: 07_feature_importance.png")
 plt.close()
 
 # ========================================
 # 3. RISK SCORECARD (PERBAIKAN WARNA)
 # ========================================
-print("\n3️⃣ CREATING RISK SCORECARD...")
+print("\n CREATING RISK SCORECARD...")
 
 # Encode target untuk full dataset
 df_full['target'] = df_full['STATUS_KELULUSAN'].map({
@@ -172,18 +172,18 @@ ax2.set_title('Kategori Risiko Mahasiswa', fontsize=14, fontweight='bold')
 
 plt.tight_layout()
 plt.savefig(os.path.join(viz_dir, '08_risk_scorecard.png'), dpi=300, bbox_inches='tight')
-print(f"✅ Risk Scorecard saved: 08_risk_scorecard.png")
+print(f" Risk Scorecard saved: 08_risk_scorecard.png")
 plt.close()
 
 # Save risk scorecard to CSV
 risk_df = df_full[['NAMA', 'Risk_Score', 'Risk_Category', 'Probability_Lulus']].sort_values('Risk_Score', ascending=False)
 risk_df.to_csv(os.path.join(model_dir, 'risk_scorecard.csv'), index=False)
-print(f"✅ Risk scores saved: risk_scorecard.csv")
+print(f" Risk scores saved: risk_scorecard.csv")
 
 # ========================================
 # 4. AUTOMATED ALERT SYSTEM (PERBAIKAN WARNA & LABEL)
 # ========================================
-print("\n4️⃣ CREATING AUTOMATED ALERT SYSTEM...")
+print("\n CREATING AUTOMATED ALERT SYSTEM...")
 
 # Define alert criteria
 ips_cols = ['IPS_1', 'IPS_2', 'IPS_3', 'IPS_4', 'IPS_5', 'IPS_6', 'IPS_7', 'IPS_8']
@@ -321,16 +321,16 @@ else:
 
 plt.tight_layout()
 plt.savefig(os.path.join(viz_dir, '09_automated_alert.png'), dpi=300, bbox_inches='tight')
-print(f"✅ Automated Alert saved: 09_automated_alert.png")
+print(f" Automated Alert saved: 09_automated_alert.png")
 plt.close()
 
 # Save alert list with details
 alert_df = df_full[['NAMA', 'Avg_IPS', 'Risk_Score', 'Alert_Count', 'Alert_Category', 'Alert_Details']].sort_values('Alert_Count', ascending=False)
 alert_df.to_csv(os.path.join(model_dir, 'alert_list.csv'), index=False)
-print(f"✅ Alert list saved: alert_list.csv")
+print(f" Alert list saved: alert_list.csv")
 
 # Print alert summary
-print("\n📊 ALERT SUMMARY:")
+print("\n ALERT SUMMARY:")
 print(f"   Total mahasiswa: {len(df_full)}")
 for category in category_order_alert:
     count = category_counts_ordered.get(category, 0)
@@ -340,7 +340,7 @@ for category in category_order_alert:
 # ========================================
 # 5. CLASSIFICATION REPORT
 # ========================================
-print("\n5️⃣ GENERATING CLASSIFICATION REPORT...")
+print("\n GENERATING CLASSIFICATION REPORT...")
 
 y_pred = results['Best Random Forest']['predictions']
 accuracy = results['Best Random Forest']['accuracy']
@@ -357,34 +357,34 @@ with open(os.path.join(model_dir, 'classification_report.txt'), 'w') as f:
     f.write(report)
     f.write(f"\nOverall Accuracy: {accuracy*100:.2f}%\n")
 
-print(f"\n✅ Classification report saved: classification_report.txt")
+print(f"\n Classification report saved: classification_report.txt")
 
 # ========================================
 # 6. SUMMARY
 # ========================================
 print("\n" + "="*70)
-print("📈 EVALUATION SUMMARY")
+print(" EVALUATION SUMMARY")
 print("="*70)
 
-print(f"\n🎯 MODEL PERFORMANCE:")
+print(f"\n MODEL PERFORMANCE:")
 print(f"   Accuracy: {accuracy*100:.2f}%")
 
-print(f"\n📊 TOP 3 MOST IMPORTANT FACTORS:")
+print(f"\n TOP 3 MOST IMPORTANT FACTORS:")
 top_features = feature_importance_df.tail(3)
 for idx, row in top_features.iterrows():
     print(f"   {row['Faktor']}: {row['Tingkat Pengaruh']:.3f}")
 
-print(f"\n⚠️ RISK DISTRIBUTION:")
+print(f"\n RISK DISTRIBUTION:")
 for category, count in risk_counts.items():
     pct = (count / len(df_full)) * 100
     print(f"   {category}: {count} mahasiswa ({pct:.1f}%)")
 
-print(f"\n🚨 AUTOMATED ALERTS:")
+print(f"\n AUTOMATED ALERTS:")
 alert_students = len(df_full[df_full['Alert_Count'] >= 1])
 print(f"   Mahasiswa memerlukan perhatian: {alert_students} ({alert_students/len(df_full)*100:.1f}%)")
 high_priority_count = len(df_full[df_full['Alert_Count'] >= 2])
 print(f"   Mahasiswa prioritas tinggi: {high_priority_count}")
 
-print("\n✅ EVALUATION COMPLETE!")
-print(f"📁 Visualizations saved in: {viz_dir}")
-print(f"📁 Reports saved in: {model_dir}")
+print("\n EVALUATION COMPLETE!")
+print(f" Visualizations saved in: {viz_dir}")
+print(f" Reports saved in: {model_dir}")
