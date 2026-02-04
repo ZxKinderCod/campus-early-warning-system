@@ -285,7 +285,7 @@ ax2.set_xticks(alert_distribution.index)
 ax2.set_xticklabels([f'{int(x)} Alert' for x in alert_distribution.index], fontsize=11)
 ax2.grid(True, alpha=0.3, axis='y')
 
-# Add legend untuk penjelasan (PERBAIKAN LABEL)
+# Add legend untuk penjelasan 
 legend_labels = [
     '🟢 0 Alert = Aman (Hijau)',
     '🟡 1 Alert = Perlu Perhatian (Kuning)',
@@ -386,5 +386,5 @@ high_priority_count = len(df_full[df_full['Alert_Count'] >= 2])
 print(f"   Mahasiswa prioritas tinggi: {high_priority_count}")
 
 print("\n EVALUATION COMPLETE!")
-print(f" Visualizations saved in: {viz_dir}")
+print(f" Visualisasi saved in: {viz_dir}")
 print(f" Reports saved in: {model_dir}")
