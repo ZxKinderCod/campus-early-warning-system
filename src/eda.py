@@ -1,3 +1,4 @@
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -279,4 +280,3 @@ plt.tight_layout()
 plt.savefig(os.path.join(output_dir, '06_status_pekerjaan_ipk.png'), dpi=300, bbox_inches='tight')
 print(f" Grafik tersimpan: status_pekerjaan_ipk.png")
 plt.close()
-
